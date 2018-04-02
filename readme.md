@@ -867,3 +867,102 @@ You can now customize any of the following files below to suit your environment 
 ## globalblacklist.conf
 
 Nginx Ultimate Bad Bot Blocker is installed at `/usr/local/nginx/conf/ultimate-badbot-blocker` and where the global bad bot blacklisting is contained in `/usr/local/nginx/conf/ultimate-badbot-blocker/globalblacklist.conf`. You can see the source master list at [https://github.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/blob/master/conf.d/globalblacklist.conf](https://github.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/blob/master/conf.d/globalblacklist.conf).
+
+Example of Good bots allowed
+
+```
+# ***********************************************
+# Allow Good User-Agent Strings We Know and Trust
+# ***********************************************
+
+# START GOOD BOTS ### DO NOT EDIT THIS LINE AT ALL ###
+  "~*\badidxbot\b"    0;
+  "~*\bAdsBot-Google\b"   0;
+  "~*\baolbuild\b"    0;
+  "~*\bbingbot\b"   0;
+  "~*\bbingpreview\b"   0;
+  "~*\bDoCoMo\b"    0;
+  "~*\bduckduckgo\b"    0;
+  "~*\bfacebookexternalhit\b"   0;
+  "~*\bFeedfetcher-Google\b"    0;
+  "~*\bGooglebot\b"   0;
+  "~*\bGooglebot-Image\b"   0;
+  "~*\bGooglebot-Mobile\b"    0;
+  "~*\bGooglebot-News\b"    0;
+  "~*\bGooglebot/Test\b"    0;
+  "~*\bGooglebot-Video\b"   0;
+  "~*\bGoogle-HTTP-Java-Client\b"   0;
+  "~*\bGravityscan\b"   0;
+  "~*\bgsa-crawler\b"   0;
+  "~*\bJakarta\ Commons\b"    0;
+  "~*\bKraken/0.1\b"    0;
+  "~*\bLinkedInBot\b"   0;
+  "~*\bMediapartners-Google\b"    0;
+  "~*\bmsnbot\b"    0;
+  "~*\bmsnbot-media\b"    0;
+  "~*\bSAMSUNG\b"   0;
+  "~*\bSlackbot\b"    0;
+  "~*\bSlackbot-LinkExpanding\b"    0;
+  "~*\bslurp\b"   0;
+  "~*\bteoma\b"   0;
+  "~*\bTwitterBot\b"    0;
+  "~*\bWordpress\b"   0;
+  "~*\byahoo\b"   0;
+# END GOOD BOTS ### DO NOT EDIT THIS LINE AT ALL ###
+```
+
+User Agent strings allowed but rated limited
+
+```
+# ***************************************************
+# User-Agent Strings Allowed Through but Rate Limited
+# ***************************************************
+
+# Some people block libwww-perl, it used widely in many valid (non rogue) agents
+# I allow libwww-perl as I use it for monitoring systems with Munin but it is rate limited
+
+# START ALLOWED BOTS ### DO NOT EDIT THIS LINE AT ALL ###
+  "~*\bjetmon\b"    1;
+  "~*\blibwww-perl\b"   1;
+  "~*\bLynx\b"    1;
+  "~*\bmunin\b"   1;
+  "~*\bPresto\b"    1;
+  "~*\bWget/1.15\b"   1;
+# END ALLOWED BOTS ### DO NOT EDIT THIS LINE AT ALL ###
+```
+
+User Agent strings allowed but more aggressive/restrictive rate limiting
+
+```
+# **************************************************************
+# Rate Limited User-Agents who get a bit aggressive on bandwidth
+# **************************************************************
+
+# START LIMITED BOTS ### DO NOT EDIT THIS LINE AT ALL ###
+  "~*\bAlexa\b"   2;
+  "~*\barchive.org\b"   2;
+  "~*\bBaidu\b"   2;
+  "~*\bBUbiNG\b"    2;
+  "~*\bFlipboardProxy\b"    2;
+  "~*\bia_archiver\b"   2;
+  "~*\bMSIE\ 7.0\b"   2;
+  "~*\bProximic\b"    2;
+  "~*\bR6_CommentReader\b"    2;
+  "~*\bR6_FeedFetcher\b"    2;
+  "~*\bRED/1\b"   2;
+  "~*\bRPT-HTTPClient\b"    2;
+  "~*\bsfFeedReader/0.9\b"    2;
+  "~*\bSpaidu\b"    2;
+  "~*\bUptimeRobot/2.0\b"   2;
+  "~*\bYandexBot\b"   2;
+  "~*\bYandexImages\b"    2;
+# END LIMITED BOTS ### DO NOT EDIT THIS LINE AT ALL ###
+```
+
+bad bots listed in `/usr/local/nginx/conf/ultimate-badbot-blocker/globalblacklist.conf` section under title:
+
+```
+# *********************************************
+# Bad User-Agent Strings That We Block Outright
+# *********************************************
+```
