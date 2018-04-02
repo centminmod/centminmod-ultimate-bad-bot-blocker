@@ -1,6 +1,7 @@
 # Contents
 
 * [General Notes](#general-notes)
+  * [Support](#support)
 * [Install](#install)
 * [Post Install Checks](#post-install-checks)
   * [Check Nginx.conf Added Includes](#check-nginxconf-added-include-files)
@@ -30,7 +31,14 @@ Installation commands for Mitchell Krog developed [Ultimate Bad Bot Blocker](htt
 * `include /usr/local/nginx/conf/botlimit.conf;` in `/usr/local/nginx/conf/nginx.conf`
 * `include /usr/local/nginx/conf/blockbots.conf;` within each of your Centmin Mod Nginx vhost config files within directory at `/usr/local/nginx/conf/conf.d`
 
-Instructions below are provided as is with no support provided by me. For issues with false postives blocks etc, you will need to contact the official developer on their [Ultimate Bad Bot Blocker issue tracker](https://github.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/issues)
+### Support
+
+Instructions below are provided as is with no support provided by me. For issues with false postives blocks etc, you will need to contact the official developer on their [Ultimate Bad Bot Blocker issue tracker](https://github.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/issues).
+
+There's a mailing list and Slack Channel too:
+
+* [https://groups.google.com/forum/#!forum/nginx-ultimate-bad-bot-blocker](https://groups.google.com/forum/#!forum/nginx-ultimate-bad-bot-blocker)
+* <a href="mailto:mitchellkrog@gmail.com?subject=Please Add Me To the Slack Channel (Nginx Bad Bot Blocker)">Ask For an Invite to<img src="https://github.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/blob/master/.assets/slack.png"/></a>
 
 ## Install
 
