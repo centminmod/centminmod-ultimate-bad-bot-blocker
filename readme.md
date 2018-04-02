@@ -32,7 +32,7 @@ Instructions below are provided as is with no support provided by me. For issues
 
 ## Install
 
-Actual install commands for ultimate bad bot block
+Actual install commands for Nginx Ultimate Bad Bot Blocker installed at `/usr/local/nginx/conf/ultimate-badbot-blocker` and where the global bad bot blacklisting is contained in `/usr/local/nginx/conf/ultimate-badbot-blocker/globalblacklist.conf`. You can see the source master list at [https://github.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/blob/master/conf.d/globalblacklist.conf](https://github.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/blob/master/conf.d/globalblacklist.conf).
 
 ```
 # download and install
