@@ -21,6 +21,7 @@
 * [blockbots.conf](#blockbotsconf)
 * [Customize Configurations](#customize-configurations)
 * [globalblacklist.conf](#globalblacklistconf)
+* [ngxtop](#ngxtop)
     
 ## General Notes
 
@@ -965,4 +966,143 @@ bad bots listed in `/usr/local/nginx/conf/ultimate-badbot-blocker/globalblacklis
 # *********************************************
 # Bad User-Agent Strings That We Block Outright
 # *********************************************
+```
+
+## ngxtop
+
+You can use [ngxtop](https://github.com/lebinh/ngxtop) to analyse your Centmin Mod Nginx access logs and keep an eye on Nginx HTTP 444 status codes and also other user agent strings, HTTP status codes etc as outlined [here](https://community.centminmod.com/threads/ngxtop-real-time-metrics-for-nginx.285/).
+
+CentOS 7 ngxtop install
+
+```
+yum -y install python-pip
+pip install --upgrade pip
+pip install ngxtop
+```
+
+Check for HTTP 444 status codes `/home/nginx/domains/domain1.com/log/access.log` access log
+
+```
+grep ' 444 ' /home/nginx/domains/domain1.com/log/access.log | ngxtop --no-follow
+```
+
+Only one entry for 444 exists due to test `domain1.com` test command `curl -I http://domain1.com -e http://100dollars-seo.com` only ran once
+
+```
+grep ' 444 ' /home/nginx/domains/domain1.com/log/access.log | ngxtop --no-follow
+running for 0 seconds, 1 records processed: 2434.30 req/sec
+
+Summary:
+|   count |   avg_bytes_sent |   2xx |   3xx |   4xx |   5xx |
+|---------+------------------+-------+-------+-------+-------|
+|       1 |            0.000 |     0 |     0 |     1 |     0 |
+
+Detailed:
+| request_path   |   count |   avg_bytes_sent |   2xx |   3xx |   4xx |   5xx |
+|----------------+---------+------------------+-------+-------+-------+-------|
+| /              |       1 |            0.000 |     0 |     0 |     1 |     0 |
+```
+
+alternative use native `-i 'status == 444'` flag
+
+```
+cat /home/nginx/domains/domain1.com/log/access.log | ngxtop --no-follow -i 'status == 444'
+```
+
+```
+cat /home/nginx/domains/domain1.com/log/access.log | ngxtop --no-follow -i 'status == 444'
+running for 0 seconds, 1 records processed: 369.97 req/sec
+
+Summary:
+|   count |   avg_bytes_sent |   2xx |   3xx |   4xx |   5xx |
+|---------+------------------+-------+-------+-------+-------|
+|       1 |            0.000 |     0 |     0 |     1 |     0 |
+
+Detailed:
+| request_path   |   count |   avg_bytes_sent |   2xx |   3xx |   4xx |   5xx |
+|----------------+---------+------------------+-------+-------+-------+-------|
+| /              |       1 |            0.000 |     0 |     0 |     1 |     0 |
+```
+
+print request url, HTTP Status code and http user agent
+
+```
+cat /home/nginx/domains/domain1.com/log/access.log | ngxtop --no-follow -i 'status == 444' print request status http_user_agent
+```
+
+```
+cat /home/nginx/domains/domain1.com/log/access.log | ngxtop --no-follow -i 'status == 444' print request status http_user_agent
+running for 0 seconds, 1 records processed: 335.92 req/sec
+
+request, status, http_user_agent:
+| request         |   status | http_user_agent   |
+|-----------------+----------+-------------------|
+| HEAD / HTTP/1.1 |      444 | curl/7.29.0       |
+```
+
+group by remote IP address via `--group-by remote_addr`
+
+```
+grep ' 444 ' /home/nginx/domains/domain1.com/log/access.log | ngxtop --no-follow --group-by remote_addr
+```
+
+output where `192.168.0.1` is the visitor ip address
+
+```
+grep ' 444 ' /home/nginx/domains/domain1.com/log/access.log | ngxtop --no-follow --group-by remote_addr
+running for 0 seconds, 1 records processed: 1597.22 req/sec
+
+Summary:
+|   count |   avg_bytes_sent |   2xx |   3xx |   4xx |   5xx |
+|---------+------------------+-------+-------+-------+-------|
+|       1 |            0.000 |     0 |     0 |     1 |     0 |
+
+Detailed:
+| remote_addr   |   count |   avg_bytes_sent |   2xx |   3xx |   4xx |   5xx |
+|---------------+---------+------------------+-------+-------+-------+-------|
+| 192.168.0.1 |       1 |            0.000 |     0 |     0 |     1 |     0 |
+```
+
+group by user agent string via `--group-by http_user_agent`
+
+```
+grep ' 444 ' /home/nginx/domains/domain1.com/log/access.log | ngxtop --no-follow --group-by http_user_agent
+```
+
+the test command was run via curl hence curl user agent string
+
+```
+grep ' 444 ' /home/nginx/domains/domain1.com/log/access.log | ngxtop --no-follow --group-by http_user_agent
+running for 0 seconds, 1 records processed: 1402.31 req/sec
+
+Summary:
+|   count |   avg_bytes_sent |   2xx |   3xx |   4xx |   5xx |
+|---------+------------------+-------+-------+-------+-------|
+|       1 |            0.000 |     0 |     0 |     1 |     0 |
+
+Detailed:
+| http_user_agent   |   count |   avg_bytes_sent |   2xx |   3xx |   4xx |   5xx |
+|-------------------+---------+------------------+-------+-------+-------+-------|
+| curl/7.29.0       |       1 |            0.000 |     0 |     0 |     1 |     0 |
+```
+
+filter by specific date using grep i.e. April 2nd would filter by `'02/Apr'`
+
+```
+grep ' 444 ' /home/nginx/domains/domain1.com/log/access.log | grep '02/Apr' | ngxtop --no-follow --group-by http_user_agent
+```
+
+```
+grep ' 444 ' /home/nginx/domains/domain1.com/log/access.log | grep '02/Apr' | ngxtop --no-follow --group-by http_user_agent
+running for 0 seconds, 1 records processed: 1742.54 req/sec
+
+Summary:
+|   count |   avg_bytes_sent |   2xx |   3xx |   4xx |   5xx |
+|---------+------------------+-------+-------+-------+-------|
+|       1 |            0.000 |     0 |     0 |     1 |     0 |
+
+Detailed:
+| http_user_agent   |   count |   avg_bytes_sent |   2xx |   3xx |   4xx |   5xx |
+|-------------------+---------+------------------+-------+-------+-------+-------|
+| curl/7.29.0       |       1 |            0.000 |     0 |     0 |     1 |     0 |
 ```
