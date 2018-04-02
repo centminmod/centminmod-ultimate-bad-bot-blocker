@@ -23,7 +23,7 @@
     
 ## General Notes
 
-Installation commands for [Ultimate Bad Bot Blocker](https://github.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker) are for [Centmin Mod 123.09beta01](https://centminmod.com/) or higher LEMP stack on CentOS 6/7 specifically due to the differences in [Centmin Mod's Nginx structure](https://centminmod.com/configfiles.html). If you have existing [bad bot blocking & rate limiting](https://community.centminmod.com/threads/blocking-bad-or-aggressive-bots.6433/) setup, you will need to remove or comment out those include files with hash # in front of them first for
+Installation commands for Mitchell Krog developed [Ultimate Bad Bot Blocker](https://github.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker) are for [Centmin Mod 123.09beta01](https://centminmod.com/) or higher LEMP stack on CentOS 6/7 specifically due to the differences in [Centmin Mod's Nginx structure](https://centminmod.com/configfiles.html). If you have existing [bad bot blocking & rate limiting](https://community.centminmod.com/threads/blocking-bad-or-aggressive-bots.6433/) setup, you will need to remove or comment out those include files with hash # in front of them first for
 
 * `include /usr/local/nginx/conf/botlimit.conf;` in `/usr/local/nginx/conf/nginx.conf`
 * `include /usr/local/nginx/conf/blockbots.conf;` within each of your Centmin Mod Nginx vhost config files within directory at `/usr/local/nginx/conf/conf.d`
