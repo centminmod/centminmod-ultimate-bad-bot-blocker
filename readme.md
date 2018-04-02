@@ -20,6 +20,7 @@
 * [Bad Referrers](#bad-referrers)
 * [blockbots.conf](#blockbotsconf)
 * [Customize Configurations](#customize-configurations)
+* [globalblacklist.conf](#globalblacklistconf)
     
 ## General Notes
 
@@ -32,7 +33,7 @@ Instructions below are provided as is with no support provided by me. For issues
 
 ## Install
 
-Actual install commands for Nginx Ultimate Bad Bot Blocker installed at `/usr/local/nginx/conf/ultimate-badbot-blocker` and where the global bad bot blacklisting is contained in `/usr/local/nginx/conf/ultimate-badbot-blocker/globalblacklist.conf`. You can see the source master list at [https://github.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/blob/master/conf.d/globalblacklist.conf](https://github.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/blob/master/conf.d/globalblacklist.conf).
+Actual install commands for Nginx Ultimate Bad Bot Blocker installed at `/usr/local/nginx/conf/ultimate-badbot-blocker` and where the global bad bot blacklisting is contained in `/usr/local/nginx/conf/ultimate-badbot-blocker/globalblacklist.conf`.
 
 ```
 # download and install
@@ -675,6 +676,18 @@ Rate limiting configuration settings are located in `/usr/local/nginx/conf/ultim
 * `limit_req_zone` is setup with zone named `flood` with 90 requests/s rate limit with nodelay burst of 200 requests
 * `limit_conn_zone` is setup with connection limit set in `/usr/local/nginx/conf/ultimate-badbot-blocker/bots.d/ddos.conf` at 200 simultaneous IP connections
 
+The global bad bot blacklisting is contained in `/usr/local/nginx/conf/ultimate-badbot-blocker/globalblacklist.conf`. You can see the source master list at [https://github.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/blob/master/conf.d/globalblacklist.conf](https://github.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/blob/master/conf.d/globalblacklist.conf).
+
+Next to each entry is a number 0, 1, 2 or 3 which denote the following:
+
+```
+### Note that: 
+### 0 = allowed - no limits
+### 1 = allowed or rate limited less restrictive
+### 2 = rate limited more
+### 3 = block completely
+```
+
 ```
 cat /usr/local/nginx/conf/ultimate-badbot-blocker/botblocker-nginx-settings.conf
 ##############################################################################                                                                
@@ -850,3 +863,7 @@ You can now customize any of the following files below to suit your environment 
 /usr/local/nginx/conf/ultimate-badbot-blocker/bots.d/bad-referrer-words.conf
 /usr/local/nginx/conf/ultimate-badbot-blocker/bots.d/custom-bad-referrers.conf
 ```
+
+## globalblacklist.conf
+
+Nginx Ultimate Bad Bot Blocker is installed at `/usr/local/nginx/conf/ultimate-badbot-blocker` and where the global bad bot blacklisting is contained in `/usr/local/nginx/conf/ultimate-badbot-blocker/globalblacklist.conf`. You can see the source master list at [https://github.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/blob/master/conf.d/globalblacklist.conf](https://github.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/blob/master/conf.d/globalblacklist.conf).
