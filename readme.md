@@ -1171,17 +1171,17 @@ Detailed:
 ```
 
 ```
-cat /home/nginx/domains/domain1.com/log/access.log | ngxtop --no-follow --group-by http_user_agent            
-running for 1 seconds, 6081 records processed: 6781.49 req/sec
+cat /home/nginx/domains/domain1.com/log/access.log | ngxtop --no-follow --group-by http_user_agent   
+running for 1 seconds, 6153 records processed: 7625.33 req/sec
 
 Summary:
 |   count |   avg_bytes_sent |   2xx |   3xx |   4xx |   5xx |
 |---------+------------------+-------+-------+-------+-------|
-|    6081 |         2060.460 |   373 |     0 |    81 |  5627 |
+|    6153 |         2056.997 |   432 |     0 |    87 |  5634 |
 
 Detailed:
-| http_user_agent                                                                                                                                                                                        |   count |   avg_bytes_sent |   2xx |   3xx |   4xx |   5xx |
-|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------+------------------+-------+-------+-------+-------|
-| Baidu                                                                                                                                                                                                  |    6079 |         2060.822 |   372 |     0 |    80 |  5627 |
-| curl/7.29.0                                                                                                                                                                                            |       2 |            0.000 |     1 |     0 |     1 |     0 |
+| http_user_agent   |   count |   avg_bytes_sent |   2xx |   3xx |   4xx |   5xx |
+|-------------------+---------+------------------+-------+-------+-------+-------|
+| Baidu             |    6151 |         2057.666 |   431 |     0 |    86 |  5634 |
+| curl/7.29.0       |       2 |            0.000 |     1 |     0 |     1 |     0 |
 ```
