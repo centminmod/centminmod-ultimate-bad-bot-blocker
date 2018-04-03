@@ -66,6 +66,34 @@ setup-ngxblocker -e conf -c /usr/local/nginx/conf/ultimate-badbot-blocker -b /us
 setup-ngxblocker -x -e conf -c /usr/local/nginx/conf/ultimate-badbot-blocker -b /usr/local/nginx/conf/ultimate-badbot-blocker/bots.d -v /usr/local/nginx/conf/conf.d -m /usr/local/nginx/conf/nginx.conf
 ```
 
+I'll probably have to write up a script to check and notify me when the Ultimate Bad Bot Blocker installed scripts in `/usr/local/sbin/` are modified from their initial installed versions just to keep track when cron updates change these files
+
+* `/usr/local/sbin/install-ngxblocker`
+* `/usr/local/sbin/setup-ngxblocker`
+* `/usr/local/sbin/update-ngxblocker`
+
+Maybe via checking md5sum hashes
+
+```
+md5sum /usr/local/sbin/install-ngxblocker | tee install-ngxblocker.md5
+938734ed5ae1001f90930f4b01fa51f8  /usr/local/sbin/install-ngxblocker
+
+md5sum -c install-ngxblocker.md5
+/usr/local/sbin/install-ngxblocker: OK
+
+md5sum /usr/local/sbin/setup-ngxblocker | tee setup-ngxblocker.md5
+c5cb4d154caeb956413dadf59072c7aa  /usr/local/sbin/setup-ngxblocker
+
+md5sum -c setup-ngxblocker.md5
+/usr/local/sbin/setup-ngxblocker: OK
+
+md5sum /usr/local/sbin/update-ngxblocker | tee update-ngxblocker.md5
+47375490d11e99505931bc3b753ba338  /usr/local/sbin/update-ngxblocker
+
+md5sum -c update-ngxblocker.md5
+/usr/local/sbin/update-ngxblocker: OK
+```
+
 ## Post Install Checks
 
 ### check nginx.conf added include files
@@ -410,7 +438,7 @@ ngxrestart
 
 ## cronjob
 
-setup cronjob via `cronjob -e` command to invoke nano text editor replacing `yourname@youremail.com` with your email address for update notifications
+setup cronjob via `cronjob -e` command to invoke nano text editor replacing `yourname@youremail.com` with your email address for update notifications. Note there's currently a bug with using emails with Gmail type `+alias` usernames I logged to their issue tracker [https://github.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/issues/157](https://github.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/issues/157)
 
 ```
 00 */8 * * * /usr/local/sbin/update-ngxblocker -c /usr/local/nginx/conf/ultimate-badbot-blocker -b /usr/local/nginx/conf/ultimate-badbot-blocker/bots.d -e yourname@youremail.com
@@ -458,6 +486,35 @@ Updated: Mon Apr  2 15:35:14 SAST 2018
 
 Latest Blacklist Already Installed: 3.2018.04.1080
 
+Emailing report to: yourname@youremail.com
+```
+
+when updates are available
+
+```
+/usr/local/sbin/update-ngxblocker -c /usr/local/nginx/conf/ultimate-badbot-blocker -b /usr/local/nginx/conf/ultimate-badbot-blocker/bots.d -e yourname@youremail.com
+
+LOCAL Version: 3.2018.04.1080
+Updated: Mon Apr  2 15:35:14 SAST 2018
+
+REMOTE Version: 3.2018.04.1082
+Updated: Tue Apr  3 09:40:52 SAST 2018
+
+Update Available => 3.2018.04.1082
+
+Downloading: globalblacklist.conf ...[OK]
+
+Checking url: https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/include_filelist.txt
+
+Nothing to update for directory: /usr/local/nginx/conf/ultimate-badbot-blocker
+Nothing to update for directory: /usr/local/nginx/conf/ultimate-badbot-blocker/bots.d
+Nothing to update for directory: /usr/local/sbin
+Setting mode: 700 => /usr/local/sbin/install-ngxblocker
+Setting mode: 700 => /usr/local/sbin/setup-ngxblocker
+Setting mode: 700 => /usr/local/sbin/update-ngxblocker
+Updating bots.d path: /usr/local/nginx/conf/ultimate-badbot-blocker/bots.d => /usr/local/nginx/conf/ultimate-badbot-blocker/globalblacklist.conf
+
+Reloading NGINX configuration...[OK]
 Emailing report to: yourname@youremail.com
 ```
 
