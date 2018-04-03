@@ -667,7 +667,7 @@ X-Powered-By: centminmod
 Accept-Ranges: bytes
 ```
 
-Should respond with: curl: (52) Empty reply from server
+Should respond with: curl: (52) Empty reply from server for bad referrer domain `100dollars-seo.com` which is listed in `/usr/local/nginx/conf/ultimate-badbot-blocker/globalblacklist.conf`
 
 ```
 curl -I http://domain1.com -e http://100dollars-seo.com
@@ -676,6 +676,44 @@ curl -I http://domain1.com -e http://100dollars-seo.com
 ```
 curl -I http://domain1.com -e http://100dollars-seo.com
 curl: (52) Empty reply from server
+```
+
+```
+grep 100dollars /usr/local/nginx/conf/ultimate-badbot-blocker/globalblacklist.conf
+        "~*\b100dollars\-seo\.com\b"    1;
+```
+
+Test the rate limiting of a bot with user agent = `Baidu` which is on the aggressive rate limiting profile of 2 requests/second specified in `/usr/local/nginx/conf/ultimate-badbot-blocker/globalblacklist.conf`
+
+
+in `/usr/local/nginx/conf/ultimate-badbot-blocker/globalblacklist.conf`
+
+```
+# limits for Zone $bad_bot = 2
+# this rate limiting will only take effect if you change any of the bots and change
+# their block value from 1 to 2.
+        limit_conn_zone $bot_iplimit zone=bot2_connlimit:16m;
+        limit_req_zone  $bot_iplimit zone=bot2_reqlimitip:16m  rate=2r/s;
+```
+
+Siege load test with user agent `Baidu` rate limited with a HTTP 503 status code served up to rated limited requests
+
+```
+siege -b -c10 -r100 -A "Baidu" http://domain1.com/
+
+Lifting the server siege...
+Transactions:                    277 hits
+Availability:                  51.87 %
+Elapsed time:                 138.37 secs
+Data transferred:               1.10 MB
+Response time:                  4.90 secs
+Transaction rate:               2.00 trans/sec
+Throughput:                     0.01 MB/sec
+Concurrency:                    9.80
+Successful transactions:         277
+Failed transactions:             257
+Longest transaction:            5.01
+Shortest transaction:           0.00
 ```
 
 ## Rate Limits
@@ -1011,7 +1049,7 @@ Detailed:
 | /              |       1 |            0.000 |     0 |     0 |     1 |     0 |
 ```
 
-alternative use native `-i 'status == 444'` flag
+alternatively you can use native `-i 'status == 444'` flag
 
 ```
 cat /home/nginx/domains/domain1.com/log/access.log | ngxtop --no-follow -i 'status == 444'
@@ -1113,4 +1151,37 @@ Detailed:
 | http_user_agent   |   count |   avg_bytes_sent |   2xx |   3xx |   4xx |   5xx |
 |-------------------+---------+------------------+-------+-------+-------+-------|
 | curl/7.29.0       |       1 |            0.000 |     0 |     0 |     1 |     0 |
+```
+
+With Baidu user agent string rate limited results for HTTP 503 status codes in acces log
+
+```
+cat /home/nginx/domains/domain1.com/log/access.log | ngxtop --no-follow
+running for 1 seconds, 6081 records processed: 7868.07 req/sec
+
+Summary:
+|   count |   avg_bytes_sent |   2xx |   3xx |   4xx |   5xx |
+|---------+------------------+-------+-------+-------+-------|
+|    6081 |         2060.460 |   373 |     0 |    81 |  5627 |
+
+Detailed:
+| request_path   |   count |   avg_bytes_sent |   2xx |   3xx |   4xx |   5xx |
+|----------------+---------+------------------+-------+-------+-------+-------|
+| /              |    6081 |         2060.460 |   373 |     0 |    81 |  5627 |
+```
+
+```
+cat /home/nginx/domains/domain1.com/log/access.log | ngxtop --no-follow --group-by http_user_agent            
+running for 1 seconds, 6081 records processed: 6781.49 req/sec
+
+Summary:
+|   count |   avg_bytes_sent |   2xx |   3xx |   4xx |   5xx |
+|---------+------------------+-------+-------+-------+-------|
+|    6081 |         2060.460 |   373 |     0 |    81 |  5627 |
+
+Detailed:
+| http_user_agent                                                                                                                                                                                        |   count |   avg_bytes_sent |   2xx |   3xx |   4xx |   5xx |
+|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------+------------------+-------+-------+-------+-------|
+| Baidu                                                                                                                                                                                                  |    6079 |         2060.822 |   372 |     0 |    80 |  5627 |
+| curl/7.29.0                                                                                                                                                                                            |       2 |            0.000 |     1 |     0 |     1 |     0 |
 ```
