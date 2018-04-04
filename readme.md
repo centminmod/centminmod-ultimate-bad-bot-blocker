@@ -31,6 +31,12 @@ Installation commands for Mitchell Krog developed [Ultimate Bad Bot Blocker](htt
 * `include /usr/local/nginx/conf/botlimit.conf;` in `/usr/local/nginx/conf/nginx.conf`
 * `include /usr/local/nginx/conf/blockbots.conf;` within each of your Centmin Mod Nginx vhost config files within directory at `/usr/local/nginx/conf/conf.d`
 
+Also `update-ngxblocker` script and cronjob doesn't seem to update itself from [https://github.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/issues/157#issuecomment-378546793](https://github.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/issues/157#issuecomment-378546793) so for now need to manually update it using command and may need to setup a cronjob for that.
+
+```
+wget https://raw.githubusercontent.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/master/update-ngxblocker -O /usr/local/sbin/update-ngxblocker && chmod 700 /usr/local/sbin/update-ngxblocker
+```
+
 ### Support
 
 Instructions below are provided as is with no support provided by me. For issues with false postives blocks etc, you will need to contact the official developer on their [Ultimate Bad Bot Blocker issue tracker](https://github.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/issues).
