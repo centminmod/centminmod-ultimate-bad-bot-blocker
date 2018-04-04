@@ -783,7 +783,7 @@ Shortest transaction:           0.00
 
 Rate limiting configuration settings are located in `/usr/local/nginx/conf/ultimate-badbot-blocker/botblocker-nginx-settings.conf` and `/usr/local/nginx/conf/ultimate-badbot-blocker/bots.d/ddos.conf`
 
-* `limit_req_zone` is setup with zone named `flood` with 90 requests/s rate limit with nodelay burst of 200 requests
+* `limit_req_zone` is setup with zone named `flood` with 90 requests/s rate limit with nodelay burst of 200 requests for normal rate limits set to `1` while there's a more aggressive rate limit of 2 requests per second for items set to `2` contained in `/usr/local/nginx/conf/ultimate-badbot-blocker/globalblacklist.conf`
 * `limit_conn_zone` is setup with connection limit set in `/usr/local/nginx/conf/ultimate-badbot-blocker/bots.d/ddos.conf` at 200 simultaneous IP connections
 
 The global bad bot blacklisting is contained in `/usr/local/nginx/conf/ultimate-badbot-blocker/globalblacklist.conf`. You can see the source master list at [https://github.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/blob/master/conf.d/globalblacklist.conf](https://github.com/mitchellkrogza/nginx-ultimate-bad-bot-blocker/blob/master/conf.d/globalblacklist.conf).
@@ -796,6 +796,24 @@ Next to each entry is a number 0, 1, 2 or 3 which denote the following:
 ### 1 = allowed or rate limited less restrictive
 ### 2 = rate limited more
 ### 3 = block completely
+```
+
+at end of `/usr/local/nginx/conf/ultimate-badbot-blocker/globalblacklist.conf`
+
+```
+cat /usr/local/nginx/conf/ultimate-badbot-blocker/globalblacklist.conf
+
+# BAD BOT RATE LIMITING ZONE
+# limits for Zone $bad_bot = 1
+# Nothing Set - you can set a different zone limiter here if you like
+# We issue a 444 response instead to all bad bots.  
+
+# limits for Zone $bad_bot = 2
+# this rate limiting will only take effect if you change any of the bots and change
+# their block value from 1 to 2.
+        limit_conn_zone $bot_iplimit zone=bot2_connlimit:16m;
+        limit_req_zone  $bot_iplimit zone=bot2_reqlimitip:16m  rate=2r/s;
+
 ```
 
 ```
